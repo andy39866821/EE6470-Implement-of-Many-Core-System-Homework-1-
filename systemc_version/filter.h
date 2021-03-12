@@ -13,11 +13,11 @@ private:
     const int filterWidth = 3;
     const int filterHeight = 3;
     sc_fixed <32, 24> filter[3][3] = {
-        {1, 2, 1},
-        {2, 4, 2},
-        {1, 2, 1},
+        {0.077847, 0.123317, 0.077847},
+        {0.123317, 0.195346, 0.123317},
+        {0.077847, 0.123317, 0.077847}
     };
-    sc_fixed <32, 24> factor = 16;
+    sc_fixed <32, 24> factor = 1;
 
 
     void convolution();
