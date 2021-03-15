@@ -24,6 +24,7 @@ private:
 public:
     sc_in_clk clk;
     sc_in<sc_logic> rst;
+    sc_fifo_out<sc_logic> o_finish;
     sc_fifo_out<sc_uint<8> > o_r;
     sc_fifo_out<sc_uint<8> > o_g;
     sc_fifo_out<sc_uint<8> > o_b;

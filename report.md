@@ -114,7 +114,7 @@ cout << "writing bitmap..." << '\t' << sc_time_stamp()<< endl;
 ```
 #### testbench
 The function read in and write out bmp file is just like the function that template provied. Below is the IO module that IO data with filter.
-for below 2 modules, they all waiting the control signal (i, j ,x etc.) then do the function(send data or write out data to bmp output function).
+for below 2 modules, they all waiting the control signal (i, j ,x etc.) then do the function(send data or write out data to bmp output function). Finally, filter will send a **finish** signal when writing to let  tb know that wether the whold procedure is done or not.
 ```
 void Testbench::input_data(){
   
@@ -133,28 +133,37 @@ void Testbench::input_data(){
   }
 
 }
+
+}
 void Testbench::output_data(){
   
   sc_int<32> x, y;
   sc_uint<8> R, G, B;
+  sc_logic finish;
   
   while(1){
-
+    
+    //cout << "reading i j x y r g b in output" << endl;
     x = i_x.read();
     y = i_y.read();
     R = i_r.read();
     G = i_g.read();
     B = i_b.read();
+    finish = i_finish.read();
+    
+    //cout << "finish reading in output" << endl;
     
     *(image_t + byte_per_pixel * (width * y + x) + 2) = R;
     *(image_t + byte_per_pixel * (width * y + x) + 1) = G;
     *(image_t + byte_per_pixel * (width * y + x) + 0) = B;
+    if(finish == true)
+      sc_stop();
   }
 }
 ```
 
 #### filter
-Here is the main for loop that computing the result then write out, it just like C++ version above, but it read and write data rather then access the class variable directly, and there is the important thing that I must add clock triiger **wait()** to prevent deadlock before r/w data.
+Here is the main for loop that computing the result then write out, it just like C++ version above, but it read and write data rather then access the class variable directly, and there is the important thing that I must add clock triiger **wait()** to prevent deadlock before r/w data.And filter will send **finish** to tb to let it know procedure is finish or not.
 ```
 for (y = 0; y != height; ++y) {
         for (x = 0; x != width; ++x) {
@@ -187,6 +196,8 @@ for (y = 0; y != height; ++y) {
             o_r.write((sc_uint<8>)R);
             o_g.write((sc_uint<8>)G);
             o_b.write((sc_uint<8>)B);
+            o_finish.write((sc_logic)(y == height-1 && x == width-1));
+        
         }
     }
 ```

@@ -103,6 +103,7 @@ void Testbench::output_data(){
   
   sc_int<32> x, y;
   sc_uint<8> R, G, B;
+  sc_logic finish;
   
   while(1){
     
@@ -112,10 +113,14 @@ void Testbench::output_data(){
     R = i_r.read();
     G = i_g.read();
     B = i_b.read();
+    finish = i_finish.read();
+    
     //cout << "finish reading in output" << endl;
     
     *(image_t + byte_per_pixel * (width * y + x) + 2) = R;
     *(image_t + byte_per_pixel * (width * y + x) + 1) = G;
     *(image_t + byte_per_pixel * (width * y + x) + 0) = B;
+    if(finish == true)
+      sc_stop();
   }
 }

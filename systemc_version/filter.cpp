@@ -1,6 +1,5 @@
 #include "filter.h"
 
-
 Filter::Filter(sc_module_name n): sc_module(n){
   SC_THREAD(convolution);
     sensitive << clk.pos();
@@ -45,10 +44,7 @@ void Filter::convolution(){
             o_r.write((sc_uint<8>)(R/factor));
             o_g.write((sc_uint<8>)(G/factor));
             o_b.write((sc_uint<8>)(B/factor));
+            o_finish.write((sc_logic)(y == height-1 && x == width-1));
         }
     }
-
-
-
-    sc_stop();
 }

@@ -41,6 +41,7 @@ private:
 public:
     sc_in_clk clk;
     sc_out<sc_logic> rst;
+    sc_fifo_in<sc_logic> i_finish;
     sc_fifo_out<sc_uint<8> > o_r;
     sc_fifo_out<sc_uint<8> > o_g;
     sc_fifo_out<sc_uint<8> > o_b;
@@ -53,6 +54,7 @@ public:
     sc_fifo_in<sc_int<32> > i_j;
     sc_fifo_out<sc_int<32> > o_height;
     sc_fifo_out<sc_int<32> > o_width;
+    
 
     SC_HAS_PROCESS(Testbench);
     Testbench(sc_module_name n);

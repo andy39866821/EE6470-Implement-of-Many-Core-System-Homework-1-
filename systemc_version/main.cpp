@@ -20,6 +20,7 @@ int sc_main(int argc, char *argv[]) {
     Filter filt("filt");
     sc_clock clk("clk", CLOCK_PERIOD, SC_NS);
     sc_signal<sc_logic> rst("rst");
+    sc_fifo<sc_logic> finish;
     sc_fifo<sc_int<32> > x;
     sc_fifo<sc_int<32> > y;
     sc_fifo<sc_int<32> > i;
@@ -38,6 +39,7 @@ int sc_main(int argc, char *argv[]) {
     tb.o_r(source_r);
     tb.o_g(source_g);
     tb.o_b(source_b);
+    tb.i_finish(finish);
     tb.i_r(result_r);
     tb.i_g(result_g);
     tb.i_b(result_b);
@@ -61,6 +63,7 @@ int sc_main(int argc, char *argv[]) {
     filt.o_j(j);
     filt.i_height(img_height);
     filt.i_width(img_width);
+    filt.o_finish(finish);
 
     
     cout << "reading bitmap..." << '\t' << sc_time_stamp()<< endl;
